@@ -5,6 +5,7 @@ big0
 big1
 blockchain
 bytecode
+byteorder
 bytes8
 bytes20
 bytes32
@@ -12,6 +13,8 @@ calc
 coinbase
 crypto
 dao
+eip
+eips
 eth
 ethash
 ethereum
@@ -19,6 +22,7 @@ evm
 fn
 geth
 hash32
+initcode
 ispkg
 listdir
 ommer

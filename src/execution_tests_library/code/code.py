@@ -95,24 +95,27 @@ def code_to_hex(code: str | bytes | Code) -> str:
 
 
 def generate_initcode(code: str | bytes | Code) -> Code:
+    """
+    Generate legacy initcode that inits a contract with the specified code
+    """
     code_bytes = code_to_bytes(code)
 
     initcode = bytearray()
-    # PUSH2 length (max initcode is 0xc000, so 2 bytes should suffice)
+    # PUSH2: length=<bytecode length>
     initcode.append(0x61)
     initcode += len(code_bytes).to_bytes(length=2, byteorder="big")
-    # PUSH1 (0x6000) offset
+    # PUSH1: offset=0
     initcode.append(0x60)
     initcode.append(0x00)
-    # DUP2 (0x81)
+    # DUP2
     initcode.append(0x81)
-    # PUSH1 initcode length (constant)
+    # PUSH1: initcode_length=11 (constant)
     initcode.append(0x60)
     initcode.append(0x0B)
-    # DUP3 (0x82)
+    # DUP3
     initcode.append(0x82)
-    # CODECOPY (0x39), destOffset(0), offset(0), length
+    # CODECOPY: destinationOffset=0, offset=0, length
     initcode.append(0x39)
-    # RETURN (0xF3) offset(0), length
+    # RETURN: offset=0, length
     initcode.append(0xF3)
     return Code(bytecode=bytes(initcode + code_bytes))
