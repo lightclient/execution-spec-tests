@@ -2,7 +2,7 @@
 Library for generating cross-client Ethereum execution layer tests.
 """
 
-from .code import Code, Yul
+from .code import Code, Yul, generate_initcode
 from .common import (
     Account,
     Block,
@@ -30,6 +30,7 @@ __all__ = (
     "Transaction",
     "Yul",
     "fill_test",
+    "generate_initcode",
     "test_from",
     "test_only",
     "to_address",

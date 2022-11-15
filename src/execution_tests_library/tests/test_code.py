@@ -2,7 +2,10 @@
 Test suite for `ethereum_test.code` module.
 """
 
-from ..code import Code, Yul
+
+import pytest
+
+from ..code import Code, Yul, code_to_bytes, generate_initcode
 
 
 def test_code():
@@ -14,10 +17,23 @@ def test_code():
     assert Code("0x01").assemble() == bytes.fromhex("01")
     assert Code("01").assemble() == bytes.fromhex("01")
 
-    assert (Code("0x01") + "0x02").assemble() == bytes.fromhex("0102")
-    assert ("0x01" + Code("0x02")).assemble() == bytes.fromhex("0102")
-    assert ("0x01" + Code("0x02") + "0x03").assemble() == bytes.fromhex(
-        "010203"
+
+@pytest.mark.parametrize(
+    ["code", "expected_initcode"],
+    [
+        (
+            "0x00",
+            "0x 610001 6000 81 600B 82 39 F3 00",
+        ),
+        (
+            "0x" + "FF" * 1000,
+            "0x 6103E8 6000 81 600B 82 39 F3" + "FF" * 1000,
+        ),
+    ],
+)
+def test_generate_initcode(code: str, expected_initcode: str):
+    assert generate_initcode(code).assemble() == bytes.fromhex(
+        expected_initcode.replace(" ", "").replace("0x", "")
     )
 
 
