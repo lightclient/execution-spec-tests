@@ -12,10 +12,20 @@ def test_code():
     """
     Test `ethereum_test.types.code`.
     """
-    assert Code("").assemble() == bytes()
-    assert Code("0x").assemble() == bytes()
-    assert Code("0x01").assemble() == bytes.fromhex("01")
-    assert Code("01").assemble() == bytes.fromhex("01")
+    assert code_to_bytes("") == bytes()
+    assert code_to_bytes("0x") == bytes()
+    assert code_to_bytes("0x01") == bytes.fromhex("01")
+    assert code_to_bytes("01") == bytes.fromhex("01")
+
+    assert (
+        Code(bytecode=code_to_bytes("0x01")) + "0x02"
+    ).assemble() == bytes.fromhex("0102")
+    assert (
+        "0x01" + Code(bytecode=code_to_bytes("0x02"))
+    ).assemble() == bytes.fromhex("0102")
+    assert (
+        "0x01" + Code(bytecode=code_to_bytes("0x02")) + "0x03"
+    ).assemble() == bytes.fromhex("010203")
 
 
 @pytest.mark.parametrize(
