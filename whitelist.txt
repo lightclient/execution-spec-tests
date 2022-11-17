@@ -91,6 +91,7 @@ balance
 origin
 caller
 callvalue
+calldata
 calldataload
 calldatasize
 calldatacopy
@@ -114,23 +115,32 @@ selfbalance
 basefee
 ommer
 
-pop
+authcall
+callf
+gas
+jump
+jumpdest
+jumpi
 mload
+msize
 mstore
 mstore8
+pc
+pop
+retf
+rjump
+rjumpi
+sendall
 sload
 sstore
-jump
-jumpi
-pc
-msize
-gas
-jumpdest
+tload
+tstore
 
 push
 dup
 log
 
+push0
 push1
 push2
 push3

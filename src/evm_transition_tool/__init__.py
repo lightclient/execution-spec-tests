@@ -177,6 +177,7 @@ fork_map = {
     "london": "London",
     "arrow glacier": "ArrowGlacier",
     "merged": "Merged",
+    "shanghai": "Shanghai",
 }
 
 fork_list = list(fork_map.keys())
