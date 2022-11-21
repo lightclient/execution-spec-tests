@@ -391,12 +391,12 @@ class OPCODES(Opcode, Enum):
         data_portion_length=2,
     )
     CALLF = Opcode(
-        byte=0x5E,
+        byte=0xB0,
         min_stack_height=0,  # This requirement is actually variable
         data_portion_length=2,
     )
     RETF = Opcode(
-        byte=0x49,
+        byte=0xB1,
         min_stack_height=0,  # This requirement is actually variable
     )
 
@@ -1537,6 +1537,7 @@ def test_legacy_initcode_invalid_eof_v1_contract_tx(_):
     for container in ALL_INVALID_CONTAINERS:
         initcode = generate_initcode(container)
         tx.data = initcode
+        print("filling test for "+container)
         yield StateTest(
             env=env, pre=pre, post=post, txs=[tx], name=container.name
         )

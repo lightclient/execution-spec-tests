@@ -34,10 +34,22 @@ class Filler:
 
         parser.add_argument(
             "--evm-bin",
-            help="path to evm executable that provides `t8n` and `b11r` "
+            help="path to evm executable that provides `t8n` and `b11r`"
             + "subcommands",
             default=None,
             type=Path,
+        )
+
+        parser.add_argument(
+                "--evm-verbose",
+                help="Set vebose output for evm tool",
+                action=argparse.BooleanOptionalAction,
+        )
+
+        parser.add_argument(
+                "--evm-trace",
+                help="Output evm trace of test fills",
+                action=argparse.BooleanOptionalAction,
         )
 
         parser.add_argument(
@@ -115,7 +127,11 @@ class Filler:
 
         os.makedirs(self.options.output, exist_ok=True)
 
-        t8n = EvmTransitionTool(binary=self.options.evm_bin)
+        t8n = EvmTransitionTool(
+                binary=self.options.evm_bin,
+                verbose=self.options.evm_verbose,
+                trace=self.options.evm_trace
+        )
         b11r = EvmBlockBuilder(binary=self.options.evm_bin)
 
         for filler in fillers:

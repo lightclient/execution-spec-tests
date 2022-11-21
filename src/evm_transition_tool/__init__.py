@@ -71,8 +71,10 @@ class EvmTransitionTool(TransitionTool):
 
     binary: Path
     cached_version: Optional[str] = None
+    verbose = False,
+    trace = False,
 
-    def __init__(self, binary: Optional[Path] = None):
+    def __init__(self, binary: Optional[Path] = None, verbose = False, trace = False):
         if binary is None:
             which_path = which("evm")
             if which_path is not None:
@@ -84,6 +86,8 @@ class EvmTransitionTool(TransitionTool):
                 install the full suite of utilities including the `evm` tool"""
             )
         self.binary = binary
+        self.verbose = verbose
+        self.trace = trace
 
     def evaluate(
         self,
@@ -112,6 +116,8 @@ class EvmTransitionTool(TransitionTool):
             f"--state.fork={fork}",
             f"--state.chainid={chain_id}",
             f"--state.reward={reward}",
+            f"--verbosity={5 if self.verbose else 0}",
+            f"--trace={'true' if self.trace else 'false'}",
         ]
 
         if txs_path is not None:
@@ -130,6 +136,10 @@ class EvmTransitionTool(TransitionTool):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
+
+        if self.verbose:
+            print(result.stdout.decode('utf8'))
+            print(result.stderr.decode('utf8'))
 
         if result.returncode != 0:
             raise Exception("failed to evaluate: " + result.stderr.decode())
