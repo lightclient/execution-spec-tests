@@ -53,9 +53,9 @@ def verify_transactions(txs: List[Transaction] | None, result) -> List[int]:
                 raise Exception("tx expected to fail succeeded")
             elif not tx.error and error:
                 raise Exception(f"tx unexpectedly failed: {error}")
+            elif tx.error != error:
+                raise Exception(f"tx error mismatch (got: {error}, want: {tx.error}")
 
-            # TODO: Also we need a way to check we actually got the
-            # correct error
     return list(rejected_txs.keys())
 
 

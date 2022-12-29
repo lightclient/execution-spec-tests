@@ -142,6 +142,7 @@ class BlockchainTest(BaseTest):
                 eips=eips,
             )
 
+            print(block.txs)
             rejected_txs = verify_transactions(block.txs, result)
             if len(rejected_txs) > 0 and block.exception is None:
                 raise Exception(
