@@ -21,7 +21,7 @@ from .common import (
 )
 from .filling.decorators import test_from, test_only
 from .filling.fill import fill_test
-from .spec import BlockchainTest, StateTest
+from .spec import BlockchainTest, StateTest, EOFValidationTest, EOFValidationError
 from .vm import Opcode, Opcodes
 from .vm.fork import is_fork
 
@@ -32,6 +32,8 @@ __all__ = (
     "Code",
     "CodeGasMeasure",
     "Environment",
+    "EOFValidationTest",
+    "EOFValidationError",
     "Initcode",
     "JSONEncoder",
     "Opcode",

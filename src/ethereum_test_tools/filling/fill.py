@@ -26,7 +26,6 @@ def fill_test(
     """
     fixtures: List[Fixture] = []
     for fork in forks:
-
         for index, test in enumerate(test_spec(fork)):
             if fill_limit and fill_limit not in test.name:
                 continue

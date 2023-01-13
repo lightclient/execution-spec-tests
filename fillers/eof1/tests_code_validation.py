@@ -2,9 +2,15 @@
 EOF V1 Code Validation tests
 """
 
+import subprocess
+from typing import Any, cast
+
 from ethereum_test_tools import (
     Account,
     Environment,
+    EOFValidationTest,
+    EOFValidationError,
+    Code,
     Initcode,
     StateTest,
     TestAddress,
@@ -15,6 +21,7 @@ from ethereum_test_tools import (
     test_from,
     to_address,
 )
+from ethereum_test_tools.code import code_to_bytes, code_to_hex
 
 from .code_validation import INVALID as INVALID_CODE
 from .code_validation import VALID as VALID_CODE
@@ -31,6 +38,47 @@ ALL_VALID = (
     VALID_CONTAINERS + VALID_CODE + VALID_RJUMP + VALID_FN + VALID_EXEC_FN
 )
 ALL_INVALID = INVALID_CONTAINERS + INVALID_CODE + INVALID_RJUMP + INVALID_FN
+
+
+def test_with_ref_format(t8n, b11r, engine: str, limit: str):
+    tests = [
+        EOFValidationTest(
+            name="simple",
+            code=code_to_bytes("ef00"),
+            error=EOFValidationError.UnexpectedEOF
+        )
+    ]
+    out = {}
+    for test in tests:
+        result = subprocess.run(
+            [str(t8n.binary), "eof", "--hex", code_to_hex(test.code)],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+        # todo: continue working with evm tool to output the right things here
+
+        if result.returncode != 0:
+            raise Exception("failed to evaluate: " + result.stderr.decode())
+
+        print(result.stdout)
+
+        out[test.name] = {
+            "code": code_to_hex(test.code),
+            "results": {
+                "Cancun": {
+                    "result": True if test.error is None else False,
+                    "exception": test.error if test.error is not None else None
+                }
+            }
+        }
+
+    return out
+
+cast(Any, test_with_ref_format).__filler_metadata__ = {
+    "fork": "Cancun",
+    "name": "ref_test"
+}
 
 
 @test_from(EOF_FORK_NAME)
